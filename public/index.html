@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blender Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #1e1e1e;
+            color: #ddd;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #app {
+            display: grid;
+            grid-template-columns: 200px 1fr 250px;
+            grid-template-rows: 50px 1fr 30px;
+            height: 100vh;
+            gap: 1px;
+            background: #000;
+        }
+
+        /* Header */
+        #header {
+            grid-column: 1 / -1;
+            background: #2b2b2b;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            gap: 10px;
+        }
+
+        #header button {
+            background: #3a3a3a;
+            border: none;
+            color: #ddd;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+
+        #header button:hover {
+            background: #4a4a4a;
+        }
+
+        #header button.active {
+            background: #007acc;
+        }
+
+        /* Toolbar */
+        #toolbar {
+            background: #2b2b2b;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            overflow-y: auto;
+        }
+
+        #toolbar h3 {
+            font-size: 12px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            color: #999;
+        }
+
+        #toolbar button {
+            background: #3a3a3a;
+            border: none;
+            color: #ddd;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        #toolbar button:hover {
+            background: #4a4a4a;
+        }
+
+        /* Viewport */
+        #viewport {
+            background: #383838;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #viewport canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Properties Panel */
+        #properties {
+            background: #2b2b2b;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        #properties h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+
+        .property-group {
+            margin-bottom: 15px;
+        }
+
+        .property-group label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 3px;
+            color: #999;
+        }
+
+        .property-group input {
+            width: 100%;
+            background: #3a3a3a;
+            border: 1px solid #555;
+            color: #ddd;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .property-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .property-row input {
+            flex: 1;
+        }
+
+        /* Outliner */
+        #outliner {
+            background: #2b2b2b;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        #outliner h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+
+        #outliner ul {
+            list-style: none;
+        }
+
+        #outliner li {
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+
+        #outliner li:hover {
+            background: #3a3a3a;
+        }
+
+        #outliner li.selected {
+            background: #007acc;
+        }
+
+        /* Status Bar */
+        #status {
+            grid-column: 1 / -1;
+            background: #2b2b2b;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Transform controls overlay */
+        #transform-mode {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            background: rgba(43, 43, 43, 0.9);
+            padding: 5px;
+            border-radius: 3px;
+        }
+
+        #transform-mode button {
+            background: #3a3a3a;
+            border: none;
+            color: #ddd;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        #transform-mode button:hover {
+            background: #4a4a4a;
+        }
+
+        #transform-mode button.active {
+            background: #007acc;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <div id="header">
+            <button id="file-menu">File</button>
+            <button id="edit-menu">Edit</button>
+            <button id="add-menu">Add</button>
+            <button id="render-menu">Render</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div id="toolbar">
+            <h3>Objects</h3>
+            <button id="add-cube">Add Cube</button>
+            <button id="add-sphere">Add Sphere</button>
+            <button id="add-cylinder">Add Cylinder</button>
+            <button id="add-plane">Add Plane</button>
+            <button id="add-torus">Add Torus</button>
+            <button id="add-cone">Add Cone</button>
+            
+            <h3 style="margin-top: 20px;">Edit</h3>
+            <button id="delete-object">Delete</button>
+            <button id="duplicate-object">Duplicate</button>
+        </div>
+
+        <!-- Main Viewport -->
+        <div id="viewport">
+            <canvas id="canvas"></canvas>
+            <div id="transform-mode">
+                <button id="mode-select" class="active">Select</button>
+                <button id="mode-translate">Move (G)</button>
+                <button id="mode-rotate">Rotate (R)</button>
+                <button id="mode-scale">Scale (S)</button>
+            </div>
+        </div>
+
+        <!-- Properties Panel -->
+        <div id="properties">
+            <h3>Properties</h3>
+            <div id="object-properties">
+                <p style="color: #666; font-size: 12px;">Select an object to view properties</p>
+            </div>
+        </div>
+
+        <!-- Outliner placed below toolbar -->
+        <div id="outliner" style="grid-row: 2; grid-column: 3;">
+            <h3>Outliner</h3>
+            <ul id="scene-objects">
+                <li data-id="camera">📷 Camera</li>
+                <li data-id="light">💡 Light</li>
+            </ul>
+        </div>
+
+        <!-- Status Bar -->
+        <div id="status">
+            <span id="status-text">Ready</span>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="/app.js"></script>
+</body>
+</html>
