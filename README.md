@@ -98,7 +98,7 @@ blender-clone/
 
 ## Blender Terminology Guide
 
-Use these terms consistently when describing geometry and modeling workflows in this project.
+Use these terms consistently when describing geometry and modeling workflows in this project. This is a reference for discussion and documentation, even though the current prototype only supports basic primitives and transforms.
 
 ### Surface Structure (the visible “grid”)
 
