@@ -96,6 +96,30 @@ blender-clone/
 - **Rotate** - Rotate objects around their center
 - **Scale** - Resize objects uniformly or per axis
 
+## Blender Terminology Guide
+
+Use these terms consistently when describing geometry and modeling workflows in this project. This is a reference for discussion and documentation, even though the current prototype only supports basic primitives and transforms.
+
+### Surface Structure (the visible “grid”)
+
+- **Mesh topology** — the surface structure formed by **vertices**, **edges**, and **faces** (typically quad-dominant).
+- **Vertices / Edges / Faces** — the actual mesh elements that make up the visible grid.
+- **Mesh** — the object that owns the topology; a “grid” is a visual description of its topology.
+- **Parametric surface** — a surface defined by math/curves (e.g., NURBS); not the same as mesh topology.
+
+### Adding Local Detail (more points within an existing grid)
+
+- **Subdivision** — the process of increasing mesh resolution by splitting faces.
+- **Subdivided mesh** — the result after subdivision is applied.
+- **Subdivision Surface modifier** — the non-destructive Blender tool that performs subdivision.
+- **Edge loops / Loop cuts** — manual topology edits to add local detail.
+- **Tessellation density** — a graphics/CAD-aligned term for how finely a surface is subdivided or tessellated.
+
+### Subdivision vs Tessellation
+
+- **Subdivision** emphasizes topology refinement (often quad-friendly).
+- **Tessellation** emphasizes density for rendering; may not preserve clean mesh topology.
+
 ## License
 
 MIT

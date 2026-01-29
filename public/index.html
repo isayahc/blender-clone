@@ -153,6 +153,36 @@
             overflow-y: auto;
         }
 
+        #terminology-guide {
+            background: #2b2b2b;
+            padding: 10px;
+            border-top: 1px solid #444;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        #terminology-guide h3 {
+            font-size: 13px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+
+        #terminology-guide ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        #terminology-guide strong {
+            color: #fff;
+        }
+
+        #terminology-guide .term-note {
+            color: #888;
+        }
+
         #outliner h3 {
             font-size: 14px;
             margin-bottom: 10px;
@@ -267,12 +297,24 @@
         </div>
 
         <!-- Outliner placed below toolbar -->
-        <div id="outliner" style="grid-row: 2; grid-column: 3;">
+        <div id="outliner" style="grid-row: 2; grid-column: 3; display: flex; flex-direction: column;">
             <h3>Outliner</h3>
             <ul id="scene-objects">
                 <li data-id="camera">📷 Camera</li>
                 <li data-id="light">💡 Light</li>
             </ul>
+            <div id="terminology-guide">
+                <h3>Terminology</h3>
+                <ul>
+                    <li><strong>Mesh topology</strong>: vertices, edges, faces (quad-dominant)</li>
+                    <li><strong>Subdivision</strong>: split faces to add resolution</li>
+                    <li><strong>Subdivided mesh</strong>: result of subdivision</li>
+                    <li><strong>Subdivision Surface modifier</strong>: non-destructive subdivision</li>
+                    <li><strong>Edge loops / Loop cuts</strong>: manual local detail</li>
+                    <li><strong>Tessellation density</strong>: render-oriented density</li>
+                    <li class="term-note">“Grid” refers to mesh topology, not parametric surfaces.</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Status Bar -->
